@@ -39,8 +39,16 @@ module Enumerable
     end
     output
   end
+  def my_inject(input = 1)
+    self.my_each {|i| input = yield(input,i) }
+    input
+  end
 end
 
-array = [8,2,3,4,5]
+array = [2,4,5]
 
-puts array.my_map{|item| item > 2}
+def multiply_els(array)
+  puts array.my_inject {|x, y| x*y}
+end
+
+multiply_els(array)
