@@ -21,6 +21,6 @@ class Bubble_sort
    end #end del metodo "todo"
 end #end of class
 
-@Arr=["hi", "hey", "hello"]
+@Arr=["hi", "hey", "hello", "good-bye"]
 @variable=Bubble_sort.new(@Arr)
 puts @variable.todo
