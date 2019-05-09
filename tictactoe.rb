@@ -26,9 +26,12 @@ class Board
     puts "Choose a empty square"
     option = gets.chomp.to_i
     # check if square is empty
-    @plays[option] = @plays.length == 0 ||  (@plays.length + 1)%2 != 0 ? "X":"O"
-    puts "Played on square #{option}"
-    puts @plays
+    puts @plays[option]== nil ?      @plays[option] = @plays.length == 0 ||  (@plays.length + 1)%2 != 0 ? "X":"O"
+     :   "Casilla Ocupada escoge otra"
+@plays[option]=="X" ? player=1 : player=2
+
+    puts "Player #{player} on square #{option}"
+   # puts @plays
   end
 end
 
