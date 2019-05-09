@@ -9,65 +9,138 @@
 class Board
   attr_accessor :playing
   attr_accessor :plays
-  def initialize(width, height)
-    @grid = Array.new [width, height]
+  def initialize
     @playing = true
     @plays = {}
-    puts "============="
+    puts ""
     puts "Game starting"
-    puts "============="
-    puts "==X STARTS=="
-    puts "============="
-    puts "Game finished"
-    puts "============="
+    puts "&&&&&&&&&&&&&"
+    puts ""
+  end
+
+  def show_board
+    puts " #{@plays[0] == nil ? "0" : @plays[0] } | #{@plays[1] == nil ? "1" : @plays[1] } | #{@plays[2] == nil ? "2" : @plays[2] } "
+    puts "---|---|---"
+    puts " #{@plays[3] == nil ? "3" : @plays[3] } | #{@plays[4] == nil ? "4" : @plays[4] } | #{@plays[5] == nil ? "5" : @plays[5] } "
+    puts "---|---|---"
+    puts " #{@plays[6] == nil ? "6" : @plays[6] } | #{@plays[7] == nil ? "7" : @plays[7] } | #{@plays[8] == nil ? "8" : @plays[8] } "
+    puts ""
+  end
+
+  def show_player
+    puts ""
+    if (@plays.length + 1)%2 != 0
+    puts "❌  PLAYS"
+    else
+    puts "⭕️  PLAYS"
+    end
+    puts ""
   end
 
   def play
+    check_winner
+    show_board
+    puts "====================="
     puts "Choose a empty square"
+    show_player
+    puts ""
     option = gets.chomp.to_i
-    # check if square is empty
-    puts @plays[option]== nil ?      @plays[option] = @plays.length == 0 ||  (@plays.length + 1)%2 != 0 ? "X":"O"
-     :   "Casilla Ocupada escoge otra"
-@plays[option]=="X" ? player=1 : player=2
+    if @plays[option] == nil
+      @plays[option] = @plays.length == 0 || (@plays.length + 1)%2 != 0 ? "❌":"⭕️"
+    else
+      puts ""
+      puts "Choose another square"
+      puts "====================="
+      puts ""
+    end
+  end
 
-    puts "Player #{player} on square #{option}"
-   # puts @plays
+  def check_horizontal
+    winner = false
+    for i in [0,3,6] do
+      if @plays[i] != nil
+        if(@plays[i] == @plays[i+1] && @plays[i+1] == @plays[i+2])
+          winner = true
+          break if winner
+        end
+      end
+    end
+    winner
+  end
+
+  def check_vertical
+    winner = false
+    for i in [0,1,2] do
+      if (@plays[i] == @plays[i+3] && @plays[i+3] == @plays[i+6])
+        winner = true
+        break if winner
+      end
+    end
+    winner
+  end
+
+  def check_cross
+    winner = false
+    if (@plays[0] == @plays[4] && @plays[4] == @plays[8] )
+      winner = true
+    elsif (@plays[2] == @plays[4] && @plays[4] == @plays[6] )
+      winner = true
+    end
+    winner
+  end
+
+  def check_winner
+    if(check_horizontal || check_vertical || check_cross)
+      @playing = false
+    end
   end
 end
-
 
 class TicTacToe
   attr_accessor :play
   def initialize
-    showRules
+    show_rules
     @play = true
   end
 
   def start
-    puts "New Game? 1:START 0:EXIT"
+    puts "====================="
+    puts "New Game?"
+    puts " 1:START"
+    puts " 0:EXIT"
+    puts "====================="
+    puts ""
     @input = gets.chomp.to_i
     case @input
     when 1
-      @board = Board.new(3,3)
-      while @board.playing
-        @board.play
+      @board = Board.new
+      unless @board.playing
+        puts "WINNER"
+      else
+        while @board.playing
+          @board.play
+        end
       end
     else
       @play = false
     end
   end
 
-  def showRules
+  def show_rules
     puts "======================================="
     puts "======== Welcome to TicTacToe! ========"
     puts "======================================="
-    puts "The rules are simple. Two players take"
-    puts "turns placing a mark on a 3x3 grid. Which"
-    puts "ever gets three marks lined up first wins!"
+    puts ""
+    puts "======== RULES ========"
+    puts ""
+    puts "Two players take turns placing a mark on a 3x3 grid"
+    puts "Which ever gets three marks lined up first wins!"
     puts "If there are no more room to place marks"
     puts "then it's a draw! The grids are numbered"
     puts "1-9 from top to bottom."
+    puts ""
     puts "Good luck, and have fun! :)"
+    puts ""
   end
 end
 
