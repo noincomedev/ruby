@@ -7,7 +7,7 @@
 =end
 
 class Board
-  attr_accessor :playing
+  attr_accessor :playing ,:check_winner
   attr_accessor :plays
   def initialize
     @playing = true
@@ -38,7 +38,8 @@ class Board
   end
 
   def play
-    check_winner
+
+
     show_board
     puts "====================="
     puts "Choose a empty square"
@@ -47,13 +48,17 @@ class Board
     option = gets.chomp.to_i
     if @plays[option] == nil
       @plays[option] = @plays.length == 0 || (@plays.length + 1)%2 != 0 ? "❌":"⭕️"
+      puts ""
+      @playing =true
+      check_winner
     else
+
       puts ""
       puts "Choose another square"
       puts "====================="
       puts ""
     end
-  end
+end
 
   def check_horizontal
     winner = false
@@ -71,30 +76,58 @@ class Board
   def check_vertical
     winner = false
     for i in [0,1,2] do
+      if(@plays[i] != nil)
       if (@plays[i] == @plays[i+3] && @plays[i+3] == @plays[i+6])
         winner = true
+
         break if winner
       end
+    end
     end
     winner
   end
 
   def check_cross
     winner = false
-    if (@plays[0] == @plays[4] && @plays[4] == @plays[8] )
+    if(@plays[0] != nil && @plays[2] != nil && @plays[4] != nil || @plays[6] != nil && @plays[8] != nil )
+if (@plays[0] == @plays[4] && @plays[0] == @plays[8] )
       winner = true
-    elsif (@plays[2] == @plays[4] && @plays[4] == @plays[6] )
-      winner = true
+      puts ""
+      @playing = false
     end
+    if (@plays[2] == @plays[4] && @plays[2] == @plays[6] )
+      winner = true
+      puts ""
+      @playing = false
+    end
+  end
     winner
   end
 
   def check_winner
+    check_horizontal
+    check_vertical
+    check_cross
+    check_draw
     if(check_horizontal || check_vertical || check_cross)
       @playing = false
+        puts "the player #{(@plays.length + 1)%2 != 0 ? "⭕️" : "❌"} Win the Game !!!"
+      puts ""
+      show_board
+
     end
   end
 end
+
+def check_draw
+   if (@plays.length == 9)
+     puts  "It's a Draw , Play again \n"
+     winner = true
+      puts ""
+      @playing = false
+      show_board
+   end
+    end
 
 class TicTacToe
   attr_accessor :play
@@ -114,13 +147,11 @@ class TicTacToe
     case @input
     when 1
       @board = Board.new
-      unless @board.playing
-        puts "WINNER"
-      else
+
         while @board.playing
           @board.play
         end
-      end
+
     else
       @play = false
     end
