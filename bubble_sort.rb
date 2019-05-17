@@ -1,26 +1,29 @@
-class Bubble_sort
-  attr_accessor :arr
+def bubble_sort arr
+   arr.length.times do
+      arr.each_with_index do |x,i|
+         if arr[i+1].is_a? Integer and arr[i] > arr[i+1]
+            arr[i],arr[i+1] = arr[i+1],arr[i]
+         end
+      end
+   end
+   arr.inspect
+end
 
-  def initialize(arr)
-        @arr=arr
-     end
 
-     public def todo;
-        @new_arr=@arr
-        for i in 0..@arr.length-1 do
-            for j in 0..@new_arr.length-1 do
-             @item=@arr[i]
-              @to_compare=@new_arr[j]
-                if  @item > @to_compare
-                       @arr[i] = @to_compare
-                       @new_arr[j]=@item
-                end # end of if statement
-             end #end of first for
-         end #end of the second for
-         return @arr
-   end #end del metodo "todo"
-end #end of class
+def bubble_sort_by arr,&block
+   arr.length.times do
+      arr.each_with_index do |x,i|
+         if arr[i+1].is_a? String and yield(arr[i], arr[i+1]) > 0
+            arr[i],arr[i+1] = arr[i+1],arr[i]
+         end
+      end
+   end
+end
 
-@Arr=["hi", "hey", "hello"]
-@variable=Bubble_sort.new(@Arr)
-puts @variable.todo
+arr = [9,8,7,6,4,3,2,1]
+
+puts bubble_sort arr
+
+bubble_sort_by(["hi","hello","hey", 'zalupa', 'koshkapyos', 'pidor']) do |left,right|
+   left.length - right.length
+end
