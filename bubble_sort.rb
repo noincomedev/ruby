@@ -18,7 +18,6 @@ def bubble_sort_by arr,&block
          end
       end
    end
-   puts arr.inspect
 end
 
 arr = [9,8,7,6,4,3,2,1]
