@@ -1,72 +1,73 @@
 module Enumerable
   def my_each
-  	i = 0
-  	while i < self.size
-    	yield(self[i])
-    	i += 1
+    for item in self do
+      yield(item)
     end
-    self
   end
-
   def my_each_with_index
-    i = 0
-    while i < self.size
-      yield(self[i], i)
-      i += 1
-    end
-    self
+     self.length.times{ |i| yield(self[i],i) }
   end
-
   def my_select
-    output = []
-    self.my_each do |mc|
-      if yield(mc)
-        output << mc
-      end
-    end
-    output
+    arr=[]
+    self.my_each{ |i| yield(i) ? arr.push(i) : i }
+    arr
   end
-
-  def my_all?
-    self.my_each {|i| return true unless yield(i) }
+  def my_all? &block
+    self.my_each do |x|
+      return false if yield(x) == false
+    end
     true
   end
-
   def my_any?
-    self.my_each {|i| return false if yield(i) }
-    false
+    flag=false
+      self.my_each { |x| yield(x) ? flag=1 : false }
+    return flag == 1 ? true : false
   end
-
   def my_none?
-    self.my_each {|i| return false if yield(i) }
-    false
+    flag=false
+    self.my_each{ |item| yield(item) ? flag=true : false }
+      flag==false ? true : false
   end
-
-  def count
+  def my_count
+    i = 0
     count = 0
-    self.my_each { |i| return count += 1 if yield(i) }
+    while i < self.length
+      if block_given?
+        if yield self[i]
+          count = count + 1
+        end
+      else
+        count = count + 1
+      end
+      i = i + 1
+    end
+    count
   end
-
   def my_map(procs=nil)
     arr = []
     if procs && block_given?
-      self.my_each {|i| arr << procs.call(yield(i))}
+    self.my_each {|i| arr << procs.call(yield(i))}
     elsif block_given?
       self.my_each {|i| arr << yield(i) }
-    else
+      else
       self.my_each {|i| arr << procs.call(i) }
     end
+    arr
   end
-
-  def my_inject(input)
-    self.my_each {|i| input = yield(input,i) }
-    input
+  def my_inject
+    flag=false
+    x=1
+    self.my_each { |item|
+    if flag==false
+      x=item
+      flag=true
+    else
+      x = yield(x,item)
+    end
+    }
+    x
+  end
+  def multiply_els(array)
+    array.my_inject{ |num,x| num *= x }
   end
 end
-
-array = [2,3,4]
-def multiply_els(array)
-  puts array.my_inject(1) {|x, y| x*y}
-end
-
-multiply_els(array)
