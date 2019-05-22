@@ -26,4 +26,9 @@ RSpec.describe Enumerable do
       expect([1,2,3].my_any?{|x| x}).to eql(true)
     end
   end
+  describe "#my_none?" do
+    it "return true if the item searched exist" do
+      expect([1,8,nil,9,10].my_none?{|x| x==nil}).to eql(false)
+    end
+  end
 end
