@@ -1,4 +1,4 @@
-require "../lib/enumerable_methods.rb"
+require "./lib/enumerable_methods.rb"
 
 RSpec.describe Enumerable do
   describe "#my_each" do
@@ -19,6 +19,11 @@ RSpec.describe Enumerable do
   describe "#my_select" do
     it "obtain the even numbers " do
       expect([8,18,20,4,30].my_select{|x| x%2==0}).to eql([8,18,20,4,30])
+    end
+  end
+  describe "#my_any?" do
+    it "should return true if any item" do
+      expect([1,2,3].my_any?{|x| x}).to eql(true)
     end
   end
 end
